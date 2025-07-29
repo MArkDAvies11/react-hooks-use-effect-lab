@@ -30,19 +30,22 @@ test("creates an interval with setTimeout", () => {
 
 test("decrements the timer by 1 every second", () => {
   render(<Question question={testQuestion} onAnswered={noop} />);
-  expect(screen.queryByText(/10 seconds remaining/)).toBeInTheDocument();
+  expect(screen.queryByText(/Time Remaining: 10 seconds/)).toBeInTheDocument();
   act(() => {
     jest.advanceTimersByTime(1000);
   });
-  expect(screen.queryByText(/9 seconds remaining/)).toBeInTheDocument();
+  // After 1 second, expect "Time Remaining: 9 seconds"
+expect(screen.queryByText(/Time Remaining: 9 seconds/)).toBeInTheDocument();
   act(() => {
     jest.advanceTimersByTime(1000);
   });
-  expect(screen.queryByText(/8 seconds remaining/)).toBeInTheDocument();
+  // After 1 second, expect "Time Remaining: 8 seconds"
+expect(screen.queryByText(/Time Remaining: 8 seconds/)).toBeInTheDocument();
   act(() => {
     jest.advanceTimersByTime(1000);
   });
-  expect(screen.queryByText(/7 seconds remaining/)).toBeInTheDocument();
+  // After 1 second, expect "Time Remaining: 7 seconds"
+expect(screen.queryByText(/Time Remaining: 7 seconds/)).toBeInTheDocument();
 });
 
 test("calls onAnswered after 10 seconds", () => {

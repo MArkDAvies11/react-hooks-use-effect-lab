@@ -1,40 +1,57 @@
-import React, { useState } from "react";
-import Question from "./Question";
-import quiz from "../data/quiz";
+import React, { useState } from 'react';
+import Question from './Question'; // Assuming Question.js is in the same directory
+
+const triviaQuestions = [
+  {
+    id: 1,
+    prompt: "What is the capital of France?",
+    answers: ["Berlin", "Madrid", "Paris", "Rome"],
+    correctAnswer: "Paris",
+  },
+  {
+    id: 2,
+    prompt: "Which planet is known as the Red Planet?",
+    answers: ["Earth", "Mars", "Jupiter", "Venus"],
+    correctAnswer: "Mars",
+  },
+  // ... more questions
+];
 
 function App() {
-  const [questions, setQuestions] = useState(quiz);
-  const [currentQuestionId, setCurrentQuestion] = useState(1);
-  const [score, setScore] = useState(0);
-  const currentQuestion = questions.find((q) => q.id === currentQuestionId);
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
 
-  function handleQuestionAnswered(correct) {
-    if (currentQuestionId < questions.length) {
-      setCurrentQuestion((currentQuestionId) => currentQuestionId + 1);
-    } else {
-      setCurrentQuestion(null);
+  const handleAnswered = (isCorrect) => {
+    // This callback is called when the timer runs out (false) or
+    // if you implement answer selection logic (true/false based on user input)
+
+    console.log(`Question answered: ${isCorrect ? 'Correct' : 'Incorrect/Time out'}`);
+
+    // Move to the next question
+    setCurrentQuestionIndex((prevIndex) => prevIndex + 1);
+
+    // You might want to add logic here to check if there are more questions,
+    // or end the game if all questions are answered.
+    if (currentQuestionIndex >= triviaQuestions.length - 1) {
+        console.log("Game Over!");
+        // Reset game, show score, etc.
+        setCurrentQuestionIndex(0); // For simple demonstration, loop back
     }
-    if (correct) {
-      setScore((score) => score + 1);
-    }
+  };
+
+  const currentQuestion = triviaQuestions[currentQuestionIndex];
+
+  if (!currentQuestion) {
+    return <div>Loading questions...</div>; // Or display a "Game Over" screen
   }
 
   return (
-    <main>
-      <section>
-        {currentQuestion ? (
-          <Question
-            question={currentQuestion}
-            onAnswered={handleQuestionAnswered}
-          />
-        ) : (
-          <>
-            <h1>Game Over</h1>
-            <h2>Total Correct: {score}</h2>
-          </>
-        )}
-      </section>
-    </main>
+    <div className="App">
+      <Question
+        key={currentQuestion.id} // Important for re-mounting the Question component
+        question={currentQuestion}
+        onAnswered={handleAnswered}
+      />
+    </div>
   );
 }
 
